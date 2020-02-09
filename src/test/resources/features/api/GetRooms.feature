@@ -6,3 +6,4 @@ Feature: Rooms
     When user sends GET request to "/api/rooms"
     Then user should be able to see 18 rooms
     And user verifies that response status code is 200
+

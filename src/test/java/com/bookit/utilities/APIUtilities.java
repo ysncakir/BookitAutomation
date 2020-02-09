@@ -6,8 +6,7 @@ import static io.restassured.RestAssured.given;
 
 public class APIUtilities {
 
-    private static String URI = ConfigurationReader.getProperty(ConfigurationReader.getProperty("bookit.api"+
-                            ConfigurationReader.getProperty(("environment"))));
+    private static String URI = Environment.BASE_URI;
 
 
     /**
@@ -17,8 +16,8 @@ public class APIUtilities {
 
 
     public static String getToken(){
-        Response response = given().queryParam("email", ConfigurationReader.getProperty("team.leader.email")).
-                queryParam("password", ConfigurationReader.getProperty("team.leader.password")).
+        Response response = given().queryParam("email", Environment.LEADER_USERNAME).
+                queryParam("password", Environment.LEADER_PASSWORD).
                 when().get("/sign").prettyPeek();
 
         return response.jsonPath().getString("accessToken");
@@ -30,14 +29,14 @@ public class APIUtilities {
         String password ="";
 
         if(role.toLowerCase().contains("lead")){
-            username = ConfigurationReader.getProperty("team.leader.email");
-            password = ConfigurationReader.getProperty("team.leader.password");
+            username = Environment.LEADER_USERNAME;
+            password = Environment.LEADER_PASSWORD;
         } else if(role.toLowerCase().contains("teacher")){
-            username = ConfigurationReader.getProperty("teacher.email");
-            password = ConfigurationReader.getProperty("teacher.password");
+            username = Environment.TEACHER_USERNAME;
+            password = Environment.TEACHER_PASSWORD;
         } else if(role.toLowerCase().contains("member")){
-            username = ConfigurationReader.getProperty("team.member.email");
-            password = ConfigurationReader.getProperty("team.member.password");
+            username = Environment.MEMBER_USERNAME;
+            password = Environment.MEMBER_PASSWORD;
         } else{
             throw new RuntimeException("Invalid user type!");
         }
