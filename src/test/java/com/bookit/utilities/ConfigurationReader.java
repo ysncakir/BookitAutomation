@@ -24,6 +24,6 @@ public class ConfigurationReader {
         }
     }
 
-    public static String getProperties(String key) { return properties.getProperty(key); }
+    public static String getProperty(String key) { return properties.getProperty(key); }
 
 }

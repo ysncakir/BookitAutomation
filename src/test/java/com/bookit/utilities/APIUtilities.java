@@ -1,15 +1,13 @@
 package com.bookit.utilities;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
-import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
 
 public class APIUtilities {
 
-    private static String URI = ConfigurationReader.getProperties("bookit.api.qa1");
+    private static String URI = ConfigurationReader.getProperty(ConfigurationReader.getProperty("bookit.api"+
+                            ConfigurationReader.getProperty(("environment"))));
 
 
     /**
@@ -19,8 +17,8 @@ public class APIUtilities {
 
 
     public static String getToken(){
-        Response response = given().queryParam("email", ConfigurationReader.getProperties("team.leader.email")).
-                queryParam("password", ConfigurationReader.getProperties("team.leader.password")).
+        Response response = given().queryParam("email", ConfigurationReader.getProperty("team.leader.email")).
+                queryParam("password", ConfigurationReader.getProperty("team.leader.password")).
                 when().get("/sign").prettyPeek();
 
         return response.jsonPath().getString("accessToken");
@@ -32,14 +30,14 @@ public class APIUtilities {
         String password ="";
 
         if(role.toLowerCase().contains("lead")){
-            username = ConfigurationReader.getProperties("team.leader.email");
-            password = ConfigurationReader.getProperties("team.leader.password");
+            username = ConfigurationReader.getProperty("team.leader.email");
+            password = ConfigurationReader.getProperty("team.leader.password");
         } else if(role.toLowerCase().contains("teacher")){
-            username = ConfigurationReader.getProperties("teacher.email");
-            password = ConfigurationReader.getProperties("teacher.password");
+            username = ConfigurationReader.getProperty("teacher.email");
+            password = ConfigurationReader.getProperty("teacher.password");
         } else if(role.toLowerCase().contains("member")){
-            username = ConfigurationReader.getProperties("team.member.email");
-            password = ConfigurationReader.getProperties("team.member.password");
+            username = ConfigurationReader.getProperty("team.member.email");
+            password = ConfigurationReader.getProperty("team.member.password");
         } else{
             throw new RuntimeException("Invalid user type!");
         }

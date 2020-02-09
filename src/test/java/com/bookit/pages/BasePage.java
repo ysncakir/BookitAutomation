@@ -1,4 +1,6 @@
 package com.bookit.pages;
 
-public class BasePage {
+public abstract class BasePage {
+
+
 }
