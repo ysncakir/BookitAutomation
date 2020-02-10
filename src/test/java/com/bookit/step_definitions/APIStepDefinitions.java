@@ -1,5 +1,6 @@
 package com.bookit.step_definitions;
 
+import com.bookit.pojos.Room;
 import com.bookit.utilities.APIUtilities;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -10,10 +11,13 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.Assert;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
 
 public class APIStepDefinitions {
 
@@ -72,4 +76,46 @@ public class APIStepDefinitions {
         }
 
     }
+
+
+    @Then("user should be able to see all room names")
+    public void user_should_be_able_to_see_all_room_names() {
+                    List<Room> rooms = response.jsonPath().getList("", Room.class);
+                   // Collections.sort(rooms);   will not work
+                    for(Room room: rooms){
+                        System.out.println(room.getName());
+                    }
+        System.out.println("################AFTER SORTING#############################");
+
+                    List<Room> rooms2 = new ArrayList<>(rooms);
+                    Collections.sort(rooms2);
+                    for(Room room : rooms2) {
+                        System.out.println(room.getName());
+                    }
+
+
+    }
+
+    @Then("user payload contains following room names")
+    public void user_payload_contains_following_room_names(List<String> dataTable) {
+        List<String > actualRoomNames=  response.jsonPath().getList("name");
+        Assert.assertTrue(actualRoomNames.containsAll(dataTable));
+
+    }
+
+
+    @When("user sends DELETE request to {string} to exclude student")
+    public void user_sends_DELETE_request_to_to_exclude_student(String string) {
+    response= given().
+                    accept(ContentType.JSON).auth().oauth2(token).
+              when().
+                    delete(string).prettyPeek();
+    }
+
+    @When("user verifies that status line contains {string}")
+    public void user_verifies_that_status_line_contains(String string) {
+        Assert.assertTrue(response.statusLine().contains(string));
+
+    }
+
 }
