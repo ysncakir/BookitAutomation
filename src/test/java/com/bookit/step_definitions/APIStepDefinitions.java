@@ -2,6 +2,7 @@ package com.bookit.step_definitions;
 
 import com.bookit.pojos.Room;
 import com.bookit.utilities.APIUtilities;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -118,4 +119,13 @@ public class APIStepDefinitions {
 
     }
 
+    @When("user verifies that payload contains {string}")
+    public void user_verifies_that_payload_contains(String string) {
+
+    }
+
+    @And("user verifies that payload contains {string} message")
+    public void userVerifiesThatPayloadContainsMessage(String string) {
+        response.then().assertThat().body("", contains(string));
+    }
 }
