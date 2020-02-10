@@ -48,4 +48,25 @@ public class APIUtilities {
         return response.jsonPath().getString("accessToken");
 
     }
+
+    public static Response deleteMe(String email, String password){
+        String token = given().
+                                queryParam("email", email).
+                                queryParam("password", password).
+                       when().
+                                get("/api/users/me").
+                                jsonPath().getString("accessToken");
+
+        int userToDelete = given().
+                                    auth().oauth2(token).
+                           when().
+                                    get("/api/users/me").
+                                    jsonPath().getInt("id");
+        Response response = given().auth().
+                                    oauth2(getToken("teacher")).
+                            when().
+                                    delete(EndPoints.DELETE_STUDENT, userToDelete);
+        response.prettyPeek();
+        return response;
+    }
 }
